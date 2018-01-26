@@ -1,7 +1,7 @@
 import {Component, OnChanges, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { SharedService } from '../../../_core/services/shared.service';
 import { IReservation } from '../../../_core/interfaces/reservation';
 import { IUser } from '../../../_core/interfaces/user';
@@ -47,7 +47,13 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
   minDate: Date = subDays(new Date(), 1);
   maxDate: Date = addWeeks(new Date(), 2);
   viewDate: Date = new Date();
-  reservation: IReservation = {name: '', email: '', reservationDate: this.viewDate.toDateString(), phone: ''};
+  reservation: IReservation = {
+    name: '',
+    email: '',
+    userId: '',
+    reservationDate: this.viewDate.toDateString(),
+    phone: ''
+  };
   uid = '';
 
   enum_PageType = EPageType;
@@ -58,7 +64,7 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
   constructor(
     private sharedService: SharedService,
     private afAuth: AngularFireAuth,
-    private afDB: AngularFireDatabase,
+    private afs: AngularFirestore,
     private router: Router,
     public formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
@@ -108,7 +114,7 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
       } else {
         this.uid = user.id;
       }
-      this.reservation = await this.afDB.object(`reservations/${this.uid}/${id}`).valueChanges().first().toPromise() as IReservation;
+      this.reservation = await this.afs.doc(`reservations/${id}`).valueChanges().first().toPromise() as IReservation;
       if (this.reservation) {
         this.reservation.$key = id;
         this.form.setValue({...this.reservation});
@@ -127,10 +133,16 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
       } else {
         uid = user.id;
       }
+
+      const reservation: IReservation = {
+        userId: uid,
+        ...this.form.value
+      };
+
       if (this.pageType === EPageType.CreatePage) {
-        await this.afDB.list(`reservations/${uid}`).push(this.form.value);
+        await this.afs.collection(`reservations`).add(reservation);
       } else if (this.pageType === EPageType.EditPage) {
-        await this.afDB.object(`reservations/${uid}/${this.reservation.$key}`).update(this.form.value);
+        await this.afs.doc(`reservations/${this.reservation.$key}`).update(reservation);
       }
       this.router.navigate(['/reservations']);
     } catch (e) {

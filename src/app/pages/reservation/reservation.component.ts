@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedService } from '../../_core/services/shared.service';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Subscription } from 'rxjs/Subscription';
 import { IReservation } from '../../_core/interfaces/reservation';
@@ -19,7 +19,7 @@ export class ReservationComponent implements OnInit, OnDestroy {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afDB: AngularFireDatabase,
+    private afs: AngularFirestore,
     private sharedService: SharedService,
     private router: Router
   ) { }
@@ -37,12 +37,18 @@ export class ReservationComponent implements OnInit, OnDestroy {
       } else {
         this.uid = user.id;
       }
-      this.listing$ = this.afDB.list(`reservations/${this.uid}`).snapshotChanges()
+      this.listing$ = this.afs.collection(`reservations`).snapshotChanges()
         .subscribe(items => {
           this.reservations = [];
-          items.map(x => {
-            const res = {$key: x.key, ...x.payload.val()};
-            this.reservations.push(res);
+          items.map(item => {
+            const reservation: IReservation = {
+              $key: item.payload.doc.id,
+              email: item.payload.doc.data().email,
+              name: item.payload.doc.data().name,
+              userId: item.payload.doc.data().userId,
+              reservationDate: item.payload.doc.data().reservationDate
+            };
+            this.reservations.push(reservation);
           });
         });
     } catch (e) {
@@ -64,7 +70,7 @@ export class ReservationComponent implements OnInit, OnDestroy {
 
   async deleteReservation(res: IReservation) {
     try {
-      await this.afDB.object(`reservations/${this.uid}/${res.$key}`).remove();
+      await this.afs.doc(`reservations/${res.$key}`).delete();
     } catch (e) {
       console.log(e);
     }

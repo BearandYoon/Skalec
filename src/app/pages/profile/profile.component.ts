@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { IUser } from '../../_core/interfaces/user';
@@ -18,7 +17,6 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afDB: AngularFireDatabase,
     private afs: AngularFirestore,
     private sharedService: SharedService,
   ) { }
