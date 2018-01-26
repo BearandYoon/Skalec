@@ -14,7 +14,6 @@
 
   <div id="navMenuExample" class="navbar-menu">
     <div class="navbar-start">
-
     </div>
 
     <div class="navbar-end">
@@ -24,8 +23,11 @@
       <a routerLink="reservations" routerLinkActive="is-active" class="navbar-item is-hidden-desktop-only">
         Reservations
       </a>
-      <a routerLink="users" routerLinkActive="is-active" class="navbar-item is-hidden-desktop-only">
+      <a routerLink="users" routerLinkActive="is-active" class="navbar-item is-hidden-desktop-only" *ngIf="user !== null && user?.admin">
         Clients
+      </a>
+      <a routerLink="profile" routerLinkActive="is-active" class="navbar-item is-hidden-desktop-only">
+        Profile
       </a>
       <a routerLink="contact" routerLinkActive="is-active" class="navbar-item is-hidden-desktop-only">
         Contact

@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.sharedService.user$.subscribe((user: IUser) => {
       this.user = user;
+      console.log(this.user);
     });
   }
 

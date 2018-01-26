@@ -35,13 +35,18 @@ export class LoginComponent implements OnInit {
         id: currentUser.uid,
         name: currentUser.displayName,
         email: currentUser.email,
-        photo: currentUser.photoURL
+        photo: currentUser.photoURL,
+        admin: false
       };
 
-      const db = await this.afs.doc(`users/${currentUser.uid}`).valueChanges().first().toPromise();
+      const db = await this.afs.doc(`users/${currentUser.uid}`).valueChanges().first().toPromise() as IUser;
+
       if (!db) {
         await this.afs.doc(`users/${currentUser.uid}`).set(user);
+      } else {
+        user.admin = db.admin;
       }
+
       this.sharedService.storeUser(user);
       this.router.navigate(['/reservations']);
     } catch (e) {
