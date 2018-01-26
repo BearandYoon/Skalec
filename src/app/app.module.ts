@@ -6,6 +6,7 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { AuthGuard } from './_core/guards/auth.guard';
 import { SharedService } from './_core/services/shared.service';
@@ -30,6 +31,7 @@ import { AppComponent } from './app.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFirestoreModule,
     LayoutModule,
     AuthModule,
     ProfileModule,
