@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
@@ -17,7 +16,6 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private afAuth: AngularFireAuth,
-    private afDB: AngularFireDatabase,
     private afs: AngularFirestore,
     private sharedService: SharedService
   ) { }
