@@ -37,7 +37,10 @@ export class ReservationComponent implements OnInit, OnDestroy {
       } else {
         this.uid = user.id;
       }
-      this.listing$ = this.afs.collection(`reservations`).snapshotChanges()
+      this.listing$ = this.afs.collection(`reservations`, ref => {
+        return ref.where('userId', '==', this.uid);
+      })
+        .snapshotChanges()
         .subscribe(items => {
           this.reservations = [];
           items.map(item => {
