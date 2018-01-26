@@ -36,6 +36,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         await this.afAuth.authState.first().toPromise();
         this.uid = await this.afAuth.auth.currentUser.uid;
         user = await this.afs.doc(`users/${this.uid}`).valueChanges().first().toPromise() as IUser;
+        this.sharedService.storeUser(user);
       } else {
         this.uid = user.id;
       }
