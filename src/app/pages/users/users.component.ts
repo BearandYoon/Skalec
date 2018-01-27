@@ -4,6 +4,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Subscription } from 'rxjs/Subscription';
 import { IUser } from '../../_core/interfaces/user';
+import { IReservation } from '../../_core/interfaces/reservation';
 
 @Component({
   selector: 'app-users',
@@ -62,6 +63,16 @@ export class UsersComponent implements OnInit, OnDestroy {
       }
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  async deleteUser(user: IUser) {
+    await this.afs.doc(`users/${user.id}`).delete();
+
+    const items: IReservation[] = await this.afs.collection('reservations', ref => ref.where('userId', '==', user.id))
+      .valueChanges().first().toPromise() as IReservation[];
+    for (const item of items) {
+      await this.afs.doc(`reservations/${item.$key}`).delete();
     }
   }
 }
