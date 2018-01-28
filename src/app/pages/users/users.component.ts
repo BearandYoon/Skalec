@@ -4,7 +4,6 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Subscription } from 'rxjs/Subscription';
 import { IUser } from '../../_core/interfaces/user';
-import { IReservation } from '../../_core/interfaces/reservation';
 
 @Component({
   selector: 'app-users',
