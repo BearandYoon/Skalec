@@ -52,6 +52,7 @@ export class ReservationComponent implements OnInit, OnDestroy {
                 email: item.payload.doc.data().email,
                 name: item.payload.doc.data().name,
                 userId: item.payload.doc.data().userId,
+                owner: item.payload.doc.data().owner,
                 reservationDate: item.payload.doc.data().reservationDate
               };
               this.reservations.push(reservation);
@@ -70,6 +71,7 @@ export class ReservationComponent implements OnInit, OnDestroy {
                 email: item.payload.doc.data().email,
                 name: item.payload.doc.data().name,
                 userId: item.payload.doc.data().userId,
+                owner: item.payload.doc.data().owner,
                 reservationDate: item.payload.doc.data().reservationDate
               };
               this.reservations.push(reservation);

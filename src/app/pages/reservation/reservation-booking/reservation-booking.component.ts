@@ -51,6 +51,7 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
     name: '',
     email: '',
     userId: '',
+    owner: '',
     reservationDate: this.viewDate.toDateString(),
     phone: ''
   };
@@ -136,6 +137,7 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
 
       const reservation: IReservation = {
         userId: uid,
+        owner: user.name,
         ...this.form.value
       };
 

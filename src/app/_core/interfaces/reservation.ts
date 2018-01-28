@@ -3,6 +3,7 @@ export interface IReservation {
   email: string;
   reservationDate: string;
   userId: string;
+  owner: string;
   phone?: string;
   $key?: string;
 }
