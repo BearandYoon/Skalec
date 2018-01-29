@@ -8,6 +8,8 @@ import { ReservationRoutingModule } from './reservation-routing.module';
 import { ReservationComponent } from './reservation.component';
 import { ReservationBookingComponent } from './reservation-booking/reservation-booking.component';
 
+import { UploadFileService } from '../../_core/services/upload-file.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -16,6 +18,12 @@ import { ReservationBookingComponent } from './reservation-booking/reservation-b
     ReservationRoutingModule,
     SharedModule
   ],
-  declarations: [ReservationComponent, ReservationBookingComponent]
+  declarations: [
+    ReservationComponent,
+    ReservationBookingComponent
+  ],
+  providers: [
+    UploadFileService
+  ]
 })
 export class ReservationModule { }
