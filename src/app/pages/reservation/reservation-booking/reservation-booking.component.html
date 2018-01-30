@@ -31,21 +31,7 @@
         <!--<p class="help is-danger">This email is invalid</p>-->
       </div>
 
-      <div class="upload-file-container">
-        <div *ngIf="currentFileUpload" class="progress">
-          <div class="progress-bar progress-bar-info progress-bar-striped custom-progress"
-               role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
-               aria-valuemin="0" aria-valuemax="100"
-               [ngStyle]="{width:progress.percentage+'%'}">
-            {{progress.percentage}}%</div>
-        </div>
-
-        <label class="btn btn-default">
-          <input type="file" (change)="selectFile($event)">
-        </label>
-
-        <button class="btn btn-success" type="button" [disabled]="!selectedFiles" (click)="upload()">Upload</button>
-      </div>
+      <app-file-uploader></app-file-uploader>
 
       <div class="field">
         <app-date-picker

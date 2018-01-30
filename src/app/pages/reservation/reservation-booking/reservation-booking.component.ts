@@ -6,7 +6,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { SharedService } from '../../../_core/services/shared.service';
-import { UploadFileService } from '../../../_core/services/upload-file.service';
 import { IReservation } from '../../../_core/interfaces/reservation';
 import { IUser } from '../../../_core/interfaces/user';
 import { FileUpload } from '../../../_core/interfaces/file-upload';
@@ -77,8 +76,7 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
     private afs: AngularFirestore,
     private router: Router,
     public formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private uploadService: UploadFileService
+    private activatedRoute: ActivatedRoute
   ) {
     this.dayModifier = function (day: Date): string {
       if (!this.dateIsValid(day)) {
@@ -162,17 +160,6 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
     } finally {
 
     }
-  }
-
-  selectFile(event) {
-    this.selectedFiles = event.target.files;
-  }
-
-  upload() {
-    const file = this.selectedFiles.item(0);
-    this.currentFileUpload = new FileUpload(file);
-    this.uploadService.pushFileToStorage(this.currentFileUpload, this.progress);
-    console.log('=======', this.currentFileUpload);
   }
 
   dayClicked(e) {

@@ -8,8 +8,6 @@ import { ReservationRoutingModule } from './reservation-routing.module';
 import { ReservationComponent } from './reservation.component';
 import { ReservationBookingComponent } from './reservation-booking/reservation-booking.component';
 
-import { UploadFileService } from '../../_core/services/upload-file.service';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -21,9 +19,6 @@ import { UploadFileService } from '../../_core/services/upload-file.service';
   declarations: [
     ReservationComponent,
     ReservationBookingComponent
-  ],
-  providers: [
-    UploadFileService
   ]
 })
 export class ReservationModule { }

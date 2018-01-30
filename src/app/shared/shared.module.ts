@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
+import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 
 @NgModule({
   imports: [
@@ -11,8 +12,12 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
     ReactiveFormsModule
   ],
   exports: [
-    DatePickerComponent
+    DatePickerComponent,
+    FileUploaderComponent
   ],
-  declarations: [DatePickerComponent]
+  declarations: [
+    DatePickerComponent,
+    FileUploaderComponent
+  ]
 })
 export class SharedModule { }

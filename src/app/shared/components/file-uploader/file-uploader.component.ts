@@ -1,20 +1,40 @@
-import { Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
 
-import { FileUpload } from '../interfaces/file-upload';
-import {async} from 'rxjs/scheduler/async';
+import { FileUpload } from '../../../_core/interfaces/file-upload';
 
-@Injectable()
-export class UploadFileService {
+@Component({
+  selector: 'app-file-uploader',
+  templateUrl: './file-uploader.component.html',
+  styleUrls: ['./file-uploader.component.scss']
+})
+export class FileUploaderComponent implements OnInit {
+  selectedFiles: FileList;
+  currentFileUpload: FileUpload;
+  progress: {percentage: number} = {percentage: 0};
+  basePath = '/uploads';
 
   constructor(
     private db: AngularFireDatabase,
     private afs: AngularFirestore
-  ) {}
+  ) { }
 
-  private basePath = '/uploads';
+  ngOnInit() {
+  }
+
+  selectFile(event) {
+    this.selectedFiles = event.target.files;
+  }
+
+  upload() {
+    const file = this.selectedFiles.item(0);
+    this.currentFileUpload = new FileUpload(file);
+    this.pushFileToStorage(this.currentFileUpload, this.progress);
+    console.log('=======', this.currentFileUpload);
+  }
 
   pushFileToStorage(fileUpload: FileUpload, progress: {percentage: number}) {
     const storageRef = firebase.storage().ref();
