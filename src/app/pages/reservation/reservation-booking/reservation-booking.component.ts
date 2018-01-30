@@ -188,5 +188,4 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
 
   dateOrViewChanged(): void {
   }
-
 }
