@@ -124,7 +124,12 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
       this.reservation = await this.afs.doc(`reservations/${id}`).valueChanges().first().toPromise() as IReservation;
       if (this.reservation) {
         this.reservation.$key = id;
-        this.form.setValue({...this.reservation});
+        this.form.setValue({
+          'name': this.reservation.name,
+          'reservationDate': this.reservation.reservationDate,
+          'email': this.reservation.email
+          }
+        );
       }
     } catch (e) {
     }

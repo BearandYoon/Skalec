@@ -8,7 +8,7 @@
   </div>
 
   <label class="btn btn-default">
-    <input type="file" (change)="selectFile($event)">
+    <input type="file" accept="image/*" (change)="selectFile($event)">
   </label>
 
   <button class="btn btn-success" type="button" [disabled]="!selectedFiles" (click)="upload()">Upload</button>
