@@ -172,6 +172,7 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
     const file = this.selectedFiles.item(0);
     this.currentFileUpload = new FileUpload(file);
     this.uploadService.pushFileToStorage(this.currentFileUpload, this.progress);
+    console.log('=======', this.currentFileUpload);
   }
 
   dayClicked(e) {

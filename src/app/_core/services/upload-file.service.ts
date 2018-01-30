@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
 
 import { FileUpload } from '../interfaces/file-upload';
+import {async} from 'rxjs/scheduler/async';
 
 @Injectable()
 export class UploadFileService {
 
   constructor(
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private afs: AngularFirestore
   ) {}
 
   private basePath = '/uploads';
@@ -31,12 +34,13 @@ export class UploadFileService {
         // success
         fileUpload.url = uploadTask.snapshot.downloadURL;
         fileUpload.name = fileUpload.file.name;
-        this.saveFileData(fileUpload);
+        console.log('------', fileUpload);
+        // this.saveFileData(fileUpload);
       }
     );
   }
 
-  private saveFileData(fileUpload: FileUpload) {
-    this.db.list(`${this.basePath}/`).push(fileUpload);
+  async saveFileData(fileUpload: FileUpload) {
+    await this.db.list(`reservations/`).push(fileUpload);
   }
 }
