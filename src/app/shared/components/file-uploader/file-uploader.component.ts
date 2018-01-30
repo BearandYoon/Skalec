@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 
+import { SharedService } from '../../../_core/services/shared.service';
 import { FileUpload } from '../../../_core/interfaces/file-upload';
+import { IUser } from '../../../_core/interfaces/user';
 
 @Component({
   selector: 'app-file-uploader',
@@ -16,10 +17,13 @@ export class FileUploaderComponent implements OnInit {
   currentFileUpload: FileUpload;
   progress: {percentage: number} = {percentage: 0};
   basePath = '/uploads';
+  uid = '';
+
+  @Output() fileUploadSuccess: EventEmitter<FileUpload> = new EventEmitter();
 
   constructor(
-    private db: AngularFireDatabase,
-    private afs: AngularFirestore
+    private sharedService: SharedService,
+    private afAuth: AngularFireAuth,
   ) { }
 
   ngOnInit() {
@@ -29,16 +33,24 @@ export class FileUploaderComponent implements OnInit {
     this.selectedFiles = event.target.files;
   }
 
-  upload() {
+  async upload() {
+    const user: IUser = this.sharedService.getUser();
+    if (!user.id) {
+      await this.afAuth.authState.first().toPromise();
+      this.uid = this.afAuth.auth.currentUser.uid;
+    } else {
+      this.uid = user.id;
+    }
+
     const file = this.selectedFiles.item(0);
     this.currentFileUpload = new FileUpload(file);
     this.pushFileToStorage(this.currentFileUpload, this.progress);
-    console.log('=======', this.currentFileUpload);
   }
 
   pushFileToStorage(fileUpload: FileUpload, progress: {percentage: number}) {
     const storageRef = firebase.storage().ref();
-    const uploadTask = storageRef.child(`${this.basePath}/${fileUpload.file.name}`).put(fileUpload.file);
+    const uploadTask = storageRef.child(`${this.basePath}/${this.uid}/${new Date().getTime().toString()}`)
+      .put(fileUpload.file, {contentType: fileUpload.file.type});
 
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
@@ -54,13 +66,8 @@ export class FileUploaderComponent implements OnInit {
         // success
         fileUpload.url = uploadTask.snapshot.downloadURL;
         fileUpload.name = fileUpload.file.name;
-        console.log('------', fileUpload);
-        // this.saveFileData(fileUpload);
+        this.fileUploadSuccess.emit(fileUpload);
       }
     );
-  }
-
-  async saveFileData(fileUpload: FileUpload) {
-    await this.db.list(`reservations/`).push(fileUpload);
   }
 }

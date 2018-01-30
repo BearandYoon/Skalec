@@ -31,7 +31,7 @@
         <!--<p class="help is-danger">This email is invalid</p>-->
       </div>
 
-      <app-file-uploader></app-file-uploader>
+      <app-file-uploader (fileUploadSuccess)="onFileUploadSuccess($event)"></app-file-uploader>
 
       <div class="field">
         <app-date-picker

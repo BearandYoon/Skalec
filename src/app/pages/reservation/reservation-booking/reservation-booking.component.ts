@@ -66,9 +66,7 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
 
   form: FormGroup;
 
-  selectedFiles: FileList;
   currentFileUpload: FileUpload;
-  progress: {percentage: number} = {percentage: 0};
 
   constructor(
     private sharedService: SharedService,
@@ -143,9 +141,15 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
         uid = user.id;
       }
 
+      let imageUrl = '';
+      if (this.currentFileUpload) {
+        imageUrl = this.currentFileUpload.url;
+      }
+
       const reservation: IReservation = {
         userId: uid,
         owner: user.name,
+        imageUrl: imageUrl,
         ...this.form.value
       };
 
@@ -160,6 +164,10 @@ export class ReservationBookingComponent implements OnInit, OnChanges {
     } finally {
 
     }
+  }
+
+  onFileUploadSuccess(uploadedFile: FileUpload) {
+    this.currentFileUpload = uploadedFile;
   }
 
   dayClicked(e) {

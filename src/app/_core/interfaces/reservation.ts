@@ -6,4 +6,5 @@ export interface IReservation {
   owner: string;
   phone?: string;
   $key?: string;
+  imageUrl?: string;
 }
