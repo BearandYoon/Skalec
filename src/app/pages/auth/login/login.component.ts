@@ -4,6 +4,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { IUser } from '../../../_core/interfaces/user';
+import { ILoginInfo } from '../../../_core/interfaces/login-info';
 import { SharedService } from '../../../_core/services/shared.service';
 
 @Component({
@@ -12,6 +13,12 @@ import { SharedService } from '../../../_core/services/shared.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  isSocialLogin = true;
+  newUser: ILoginInfo = {
+    email: '',
+    password: ''
+  };
 
   constructor(
     private router: Router,
@@ -23,12 +30,14 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  async loginWithSocial(socialType: string) {
+  async login(provider: string) {
     try {
-      if (socialType === 'google') {
+      if (provider === 'google') {
         await this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      } else {
+      } else if (provider === 'facebook') {
         await this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
+      } else {
+        await this.afAuth.auth.signInWithEmailAndPassword(this.newUser.email, this.newUser.password);
       }
       const currentUser = await this.afAuth.auth.currentUser;
       const user: IUser = {
@@ -50,7 +59,11 @@ export class LoginComponent implements OnInit {
       this.sharedService.storeUser(user);
       this.router.navigate(['/reservations']);
     } catch (e) {
-    } finally {
+      console.log(e);
     }
+  }
+
+  toggleLoginMethod() {
+    this.isSocialLogin = !this.isSocialLogin;
   }
 }
